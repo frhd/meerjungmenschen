@@ -1,0 +1,61 @@
+/* ============================================================
+   Meerjungmenschen — ambient stage animation
+   GPU-friendly: keyframes touch ONLY transform / opacity.
+   Pivots (transform-origin) for tail/hair are set INLINE from
+   geometry.ts (PIVOTS), never hardcoded here.
+   All animation is disabled under prefers-reduced-motion (end).
+   ============================================================ */
+
+/* Whole figure idle float — gentle vertical bob. */
+@keyframes figure-float {
+  from { transform: translateY(-3px); }
+  to   { transform: translateY(3px); }
+}
+.anim-figure {
+  animation: figure-float 5s ease-in-out infinite alternate;
+}
+
+/* Tail sway — rotates about the waist seam (origin set inline). */
+@keyframes tail-sway {
+  from { transform: rotate(-3deg); }
+  to   { transform: rotate(3deg); }
+}
+.anim-tail {
+  animation: tail-sway 4s ease-in-out infinite alternate;
+}
+
+/* Back-hair drift — subtle rotate about the crown (origin set inline). */
+@keyframes hair-drift {
+  from { transform: rotate(-2deg); }
+  to   { transform: rotate(2deg); }
+}
+.anim-hairback {
+  animation: hair-drift 6s ease-in-out infinite alternate;
+}
+
+/* Rising bubble — floats up the water column and fades.
+   Per-bubble animationDelay / animationDuration are set inline
+   in Scene.tsx so each bubble is staggered. */
+@keyframes bubble-rise {
+  0%   { transform: translateY(0); opacity: 0; }
+  15%  { opacity: 0.5; }
+  85%  { opacity: 0.5; }
+  100% { transform: translateY(-220px); opacity: 0; }
+}
+.anim-bubble {
+  animation: bubble-rise 9s ease-in infinite;
+}
+
+/* Companion bob — gentle hover + slight tilt.
+   Defined now; the Companion component (Stage 4) attaches it. */
+@keyframes companion-bob {
+  from { transform: translateY(-4px) rotate(-2deg); }
+  to   { transform: translateY(4px) rotate(2deg); }
+}
+.anim-companion {
+  animation: companion-bob 4.5s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-figure, .anim-tail, .anim-hairback, .anim-bubble, .anim-companion { animation: none !important; }
+}

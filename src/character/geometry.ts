@@ -188,3 +188,14 @@ export const EARRINGS: ReadonlyArray<{ x: number; y: number }> = [
   { x: HEAD.cx - HEAD.rx + 4, y: EAR_Y },
   { x: HEAD.cx + HEAD.rx - 4, y: EAR_Y },
 ];
+
+// ── Animation pivots ─────────────────────────────────────────
+// transform-origin anchors for the ambient animation (stage.css).
+// CSS transform-origin on SVG elements is in user (viewBox) units,
+// so these map straight to `${x}px ${y}px` inline styles.
+export const PIVOTS = {
+  /** Tail sway pivots at the waist seam where tail meets torso. */
+  tail: { x: CX, y: TORSO.waistY }, // 160, 276
+  /** Hair drift pivots near the crown (top of the head). */
+  hair: { x: CX, y: HEAD.cy - HEAD.ry + 6 }, // 160, 47
+} as const;

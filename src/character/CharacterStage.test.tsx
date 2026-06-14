@@ -77,6 +77,16 @@ describe('CharacterStage', () => {
     }
   });
 
+  it('wires the ambient animation hooks (float, tail sway, bubbles)', () => {
+    const markup = render(DEFAULT_CHARACTER);
+    // Figure float wrapper + nested tail/hair groups are present.
+    expect(markup).toContain('anim-figure');
+    expect(markup).toContain('anim-tail');
+    expect(markup).toContain('anim-hairback');
+    // Scene emits ambient bubbles.
+    expect(markup).toContain('anim-bubble');
+  });
+
   it('never throws or renders blank on unknown ids (default fallbacks)', () => {
     const weird: Character = {
       ...DEFAULT_CHARACTER,

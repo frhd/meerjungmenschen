@@ -47,8 +47,48 @@ export function Scene({ scene }: SceneProps) {
       <rect x={0} y={0} width={WIDTH} height={HEIGHT} fill={`url(#${waterId})`} />
 
       <SceneDecor scene={key} raysId={raysId} />
+
+      {/* Ambient rising bubbles — water is everywhere, so all scenes get them. */}
+      <Bubbles />
     </g>
   );
+}
+
+/**
+ * A small set of slowly rising bubbles drifting up the water column.
+ * Deterministic (index-seeded LCG, like the Scene/Tail decor) so the
+ * markup is stable. Each bubble's animationDelay / animationDuration is
+ * set inline to stagger the rise; the CSS keyframe lives in stage.css.
+ */
+function Bubbles() {
+  const count = 10;
+  let seed = 71;
+  const rand = () => {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
+  };
+  const bubbles = [];
+  for (let i = 0; i < count; i += 1) {
+    const cx = 14 + rand() * (WIDTH - 28);
+    // Start low in the water column; the keyframe rises upward from here.
+    const cy = HEIGHT * 0.55 + rand() * (HEIGHT * 0.4);
+    const r = 1.5 + rand() * 3;
+    const delay = rand() * 9;
+    const duration = 8 + rand() * 6;
+    bubbles.push(
+      <circle
+        key={i}
+        className="anim-bubble"
+        cx={cx}
+        cy={cy}
+        r={r}
+        fill="#ffffff"
+        opacity={0.18}
+        style={{ animationDelay: `${delay.toFixed(2)}s`, animationDuration: `${duration.toFixed(2)}s` }}
+      />,
+    );
+  }
+  return <g aria-hidden="true">{bubbles}</g>;
 }
 
 interface DecorProps {
@@ -131,7 +171,7 @@ function ShallowDecor({ raysId }: { raysId: string }) {
   return <g>{rays}</g>;
 }
 
-/** Tiefsee: a darkening vignette plus a few drifting particles. */
+/** Tiefsee: a darkening vignette plus a few faint suspended specks. */
 function DeepDecor() {
   // A handful of static specks; pseudo-random but deterministic.
   const motes: Array<{ x: number; y: number; r: number }> = [];
@@ -173,5 +213,3 @@ function WreckDecor() {
     </g>
   );
 }
-
-export default Scene;

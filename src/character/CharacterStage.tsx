@@ -1,5 +1,6 @@
 import type { Character } from '../types';
-import { VIEWBOX } from './geometry';
+import { VIEWBOX, PIVOTS } from './geometry';
+import './stage.css';
 import { Scene } from './parts/Scene';
 import { Body } from './parts/Body';
 import { Tail } from './parts/Tail';
@@ -31,32 +32,46 @@ export function CharacterStage({ character }: CharacterStageProps) {
       width="100%"
       height="100%"
     >
-      {/* Underwater backdrop — backmost layer */}
+      {/* Underwater backdrop — backmost layer, stays still while the figure floats */}
       <Scene scene={scene} />
 
-      {/* Long hair flowing behind the body */}
-      <Hair style={hair.style} color={hair.color} layer="back" />
+      {/* The whole figure gently floats together; layering inside is unchanged:
+          HairBack → Tail → Body → Top → Face → HairFront → Nails → Accessories */}
+      <g className="anim-figure">
+        {/* Long hair flowing behind the body — drifts about the crown */}
+        <g
+          className="anim-hairback"
+          style={{ transformOrigin: `${PIVOTS.hair.x}px ${PIVOTS.hair.y}px` }}
+        >
+          <Hair style={hair.style} color={hair.color} layer="back" />
+        </g>
 
-      {/* Fish lower half */}
-      <Tail shape={tail.shape} color={tail.color} pattern={tail.pattern} />
+        {/* Fish lower half — sways about the waist seam */}
+        <g
+          className="anim-tail"
+          style={{ transformOrigin: `${PIVOTS.tail.x}px ${PIVOTS.tail.y}px` }}
+        >
+          <Tail shape={tail.shape} color={tail.color} pattern={tail.pattern} />
+        </g>
 
-      {/* Skin: head, neck, torso, arms, hands */}
-      <Body skinTone={skinTone} bodyType={bodyType} />
+        {/* Skin: head, neck, torso, arms, hands */}
+        <Body skinTone={skinTone} bodyType={bodyType} />
 
-      {/* Clothing across the bust */}
-      <Top style={top.style} color={top.color} />
+        {/* Clothing across the bust */}
+        <Top style={top.style} color={top.color} />
 
-      {/* Facial features */}
-      <Face expression={face} skinTone={skinTone} />
+        {/* Facial features */}
+        <Face expression={face} skinTone={skinTone} />
 
-      {/* Front hair cap + bangs framing the face */}
-      <Hair style={hair.style} color={hair.color} layer="front" />
+        {/* Front hair cap + bangs framing the face (static, stays on the face) */}
+        <Hair style={hair.style} color={hair.color} layer="front" />
 
-      {/* Painted nails on the hands */}
-      <Nails color={nails} />
+        {/* Painted nails on the hands */}
+        <Nails color={nails} />
 
-      {/* Crown / necklace / earrings (each only if enabled) */}
-      <Accessories crown={accessories.crown} necklace={accessories.necklace} earrings={accessories.earrings} />
+        {/* Crown / necklace / earrings (each only if enabled) */}
+        <Accessories crown={accessories.crown} necklace={accessories.necklace} earrings={accessories.earrings} />
+      </g>
     </svg>
   );
 }
