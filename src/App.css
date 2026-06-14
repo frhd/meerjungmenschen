@@ -10,7 +10,7 @@
 
 .app-header {
   width: 100%;
-  max-width: 880px;
+  max-width: 1120px;
   text-align: center;
 }
 
@@ -60,7 +60,7 @@
 
 .app-main {
   width: 100%;
-  max-width: 880px;
+  max-width: 1120px;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -69,9 +69,9 @@
 }
 
 .app-stage {
-  flex: 1 1 360px;
+  flex: 1 1 460px;
   min-width: 0;
-  max-width: 420px;
+  max-width: 540px;
   display: flex;
   justify-content: center;
 }
@@ -79,7 +79,7 @@
 /* Soft underwater card holding the SVG */
 .app-stage-frame {
   width: 100%;
-  max-width: 420px;
+  max-width: 540px;
   aspect-ratio: 3 / 4;
   padding: clamp(0.75rem, 2vw, 1.25rem);
   border-radius: 24px;
@@ -97,9 +97,14 @@
 }
 
 .app-wardrobe {
-  flex: 1 1 340px;
+  flex: 1 1 460px;
   min-width: 0;
-  max-width: 440px;
+  max-width: 540px;
+  /* Match the stage card's footprint: same width range + 3:4 aspect, so the
+     two cards are the same size. The wardrobe scrolls internally when a tab
+     (e.g. Make-up) has more controls than fit. */
+  aspect-ratio: 3 / 4;
+  display: flex;
 }
 
 /* Stack vertically on narrow screens (stage on top, wardrobe below). */
@@ -113,6 +118,11 @@
   .app-wardrobe {
     flex: 1 1 auto;
     width: 100%;
-    max-width: 420px;
+    max-width: 480px;
+  }
+
+  /* Stacked: let the wardrobe grow with the page instead of capping it. */
+  .app-wardrobe {
+    aspect-ratio: auto;
   }
 }

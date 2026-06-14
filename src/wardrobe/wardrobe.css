@@ -15,6 +15,24 @@
   box-shadow: 0 12px 30px rgba(36, 64, 73, 0.12);
   color: var(--wd-text);
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Fill the (height-capped) .app-wardrobe column; clip so the panel — not
+     the whole card — scrolls. */
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* When stacked on narrow screens the column height cap is removed, so let the
+   card grow naturally instead of clipping. */
+@media (max-width: 720px) {
+  .wardrobe {
+    height: auto;
+    overflow: visible;
+  }
+  .wd-panel {
+    overflow: visible;
+  }
 }
 
 /* ── Tab bar ───────────────────────────────────────────────── */
@@ -24,6 +42,7 @@
   padding: 6px;
   background: var(--wd-surface-soft);
   border-radius: 16px;
+  flex-shrink: 0; /* stays pinned while the panel scrolls */
 }
 
 .wd-tab {
@@ -58,6 +77,12 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+
+  /* Scroll within the card when a tab's controls overflow the matched height. */
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px; /* breathing room for the scrollbar */
 }
 
 .wd-group {

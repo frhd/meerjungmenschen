@@ -107,6 +107,26 @@ describe('Wardrobe', () => {
     expect(latest.tail.color).toBe(DEFAULT_CHARACTER.tail.color);
   });
 
+  it('selecting a lip style on the Make-up tab updates makeup.lips.style and preserves siblings', async () => {
+    const user = userEvent.setup();
+    let latest: Character = DEFAULT_CHARACTER;
+    render(<Harness onState={(c) => (latest = c)} />);
+
+    await user.click(screen.getByRole('tab', { name: 'Make-up' }));
+
+    // 'Herzchen' is unique to the lip styles ('Klassik' also appears under Eyeliner).
+    const herz = screen.getByRole('button', { name: 'Herzchen' });
+    await user.click(herz);
+
+    expect(latest.makeup.lips.style).toBe('herz');
+    // sibling color and the other makeup groups are untouched
+    expect(latest.makeup.lips.color).toBe(DEFAULT_CHARACTER.makeup.lips.color);
+    expect(latest.makeup.eyeshadow).toEqual(DEFAULT_CHARACTER.makeup.eyeshadow);
+    expect(latest.makeup.blush).toEqual(DEFAULT_CHARACTER.makeup.blush);
+    expect(latest.makeup.eyeliner).toBe(DEFAULT_CHARACTER.makeup.eyeliner);
+    expect(latest.makeup.freckles).toBe(DEFAULT_CHARACTER.makeup.freckles);
+  });
+
   it('selecting a scene on the Welt tab updates scene', async () => {
     const user = userEvent.setup();
     let latest: Character = DEFAULT_CHARACTER;

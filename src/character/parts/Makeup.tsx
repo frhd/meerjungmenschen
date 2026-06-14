@@ -76,8 +76,8 @@ function Eyeshadow({ style, color }: { style?: string; color?: string }) {
             <ellipse cx={ex} cy={cy} rx={rx} ry={ry} fill={fill} opacity={0.5} />
             {style === 'glitzer' && (
               <>
-                <circle cx={ex - 3} cy={cy - 1} r={1} fill="#fff6e0" opacity={0.9} />
-                <circle cx={ex + 2} cy={cy + 1} r={1.2} fill="#fffefb" opacity={0.85} />
+                <circle cx={ex - sgn * 3} cy={cy - 1} r={1} fill="#fff6e0" opacity={0.9} />
+                <circle cx={ex + sgn * 2} cy={cy + 1} r={1.2} fill="#fffefb" opacity={0.85} />
                 <circle cx={ex + sgn * 4} cy={cy - 2} r={0.9} fill="#fff6e0" opacity={0.8} />
               </>
             )}
@@ -121,14 +121,15 @@ function Eyeliner({ style }: { style?: string }) {
             {style === 'wimpern' &&
               // A few short lashes radiating up from the upper lid.
               [-0.6, -0.1, 0.4].map((t, i) => {
-                const lx = ex + t * FACE.eyeRX;
+                // Mirror the lash fan L/R so both eyes splay outward.
+                const lx = ex + sgn * t * FACE.eyeRX;
                 const ly = FACE.eyeY - FACE.eyeRY + 1;
                 return (
                   <line
                     key={i}
                     x1={lx}
                     y1={ly}
-                    x2={lx + t * 2}
+                    x2={lx + sgn * t * 2}
                     y2={ly - 4}
                     stroke={LINER}
                     strokeWidth={1.4}
