@@ -4,28 +4,51 @@
 //
 // Every part component imports anchors from here so the head,
 // torso, tail, hair, top, face, nails and accessories all ALIGN.
-// The viewBox is 320 wide × 520 tall. The figure is centred on
-// the vertical axis CX and reads top→bottom: head → torso → tail.
+// The FIGURE lives in a 320×520 "figure box" (all anchors below are
+// in that space). The visible canvas — the viewBox — is the larger
+// WORLD that frames the figure in roomier open water so more of the
+// scene shows around it. The figure is centred on the vertical axis
+// CX and reads top→bottom: head → torso → tail.
 // ============================================================
 
 import type { BodyType } from '../types';
 
-/** SVG viewBox string shared by the single <svg> in CharacterStage. */
-export const VIEWBOX = '0 0 320 520';
-
+/** The figure box: the coordinate space all figure anchors live in. */
 export const WIDTH = 320;
 export const HEIGHT = 520;
 
+// ── World / canvas ───────────────────────────────────────────
+// The viewBox is the WORLD, not the figure box. We surround the
+// 320×520 figure with open water on every side so a bigger world is
+// visible. The world ratio is kept at 3:4 to match the
+// .app-stage-frame card, so the SVG fills it with no letterboxing.
+const MARGIN_X = 80; // open water to the left & right of the figure
+const MARGIN_Y = 60; // open water above & below the figure
+
+export const WORLD = {
+  left: -MARGIN_X,
+  top: -MARGIN_Y,
+  width: WIDTH + MARGIN_X * 2, // 480
+  height: HEIGHT + MARGIN_Y * 2, // 640
+  right: WIDTH + MARGIN_X, // 400
+  bottom: HEIGHT + MARGIN_Y, // 580
+} as const;
+
+/** SVG viewBox string shared by the single <svg> in CharacterStage. */
+export const VIEWBOX = `${WORLD.left} ${WORLD.top} ${WORLD.width} ${WORLD.height}`;
+
 // ── Scene / backdrop ─────────────────────────────────────────
-// The backmost layer (Scene.tsx). All scene-decoration coordinates
-// derive from these named anchors so nothing is hardcoded in the part.
+// The backmost layer (Scene.tsx) fills the whole WORLD. All
+// scene-decoration coordinates derive from these named anchors (and
+// the WORLD bounds) so nothing is hardcoded in the part.
 export const SCENE = {
-  /** Top of the seabed sand mound. */
-  seabedY: 472,
-  /** Y where downward light rays fade out (top reach of the rays). */
-  horizonY: 110,
+  /** Top of the seabed sand mound — sits low in the world, below the
+      figure's fluke, leaving open water between figure and seafloor. */
+  seabedY: WORLD.bottom - 52,
+  /** Y where downward light rays begin (the water surface, world top). */
+  horizonY: WORLD.top,
   /** Number of sunlight ray polygons fanned across the top. */
-  rayCount: 4,
+  rayCount: 5,
 } as const;
 
 /** Horizontal centre line. Everything is symmetric about this. */

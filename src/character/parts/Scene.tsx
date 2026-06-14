@@ -1,5 +1,5 @@
 import { useId } from 'react';
-import { WIDTH, HEIGHT, CX, SCENE } from '../geometry';
+import { WORLD, CX, SCENE } from '../geometry';
 
 interface SceneProps {
   scene: string;
@@ -43,8 +43,8 @@ export function Scene({ scene }: SceneProps) {
         </linearGradient>
       </defs>
 
-      {/* Full-bleed water fill */}
-      <rect x={0} y={0} width={WIDTH} height={HEIGHT} fill={`url(#${waterId})`} />
+      {/* Full-bleed water fill — spans the whole world */}
+      <rect x={WORLD.left} y={WORLD.top} width={WORLD.width} height={WORLD.height} fill={`url(#${waterId})`} />
 
       <SceneDecor scene={key} raysId={raysId} />
 
@@ -61,7 +61,7 @@ export function Scene({ scene }: SceneProps) {
  * set inline to stagger the rise; the CSS keyframe lives in stage.css.
  */
 function Bubbles() {
-  const count = 10;
+  const count = 14;
   let seed = 71;
   const rand = () => {
     seed = (seed * 9301 + 49297) % 233280;
@@ -69,9 +69,9 @@ function Bubbles() {
   };
   const bubbles = [];
   for (let i = 0; i < count; i += 1) {
-    const cx = 14 + rand() * (WIDTH - 28);
+    const cx = WORLD.left + 14 + rand() * (WORLD.width - 28);
     // Start low in the water column; the keyframe rises upward from here.
-    const cy = HEIGHT * 0.55 + rand() * (HEIGHT * 0.4);
+    const cy = WORLD.top + WORLD.height * 0.55 + rand() * (WORLD.height * 0.4);
     const r = 1.5 + rand() * 3;
     const delay = rand() * 9;
     const duration = 8 + rand() * 6;
@@ -110,12 +110,15 @@ function SceneDecor({ scene, raysId }: DecorProps) {
   }
 }
 
-/** Soft seabed sand mound spanning the bottom of the canvas. */
+/** Soft seabed sand mound spanning the full width of the world. */
 function Seabed({ fill }: { fill: string }) {
   const y = SCENE.seabedY;
+  const { left, right, bottom } = WORLD;
+  const q1 = (left + CX) / 2;
+  const q2 = (CX + right) / 2;
   return (
     <path
-      d={`M 0 ${HEIGHT} L 0 ${y + 18} Q ${CX * 0.5} ${y - 14} ${CX} ${y} Q ${CX * 1.5} ${y + 14} ${WIDTH} ${y + 6} L ${WIDTH} ${HEIGHT} Z`}
+      d={`M ${left} ${bottom} L ${left} ${y + 18} Q ${q1} ${y - 14} ${CX} ${y} Q ${q2} ${y + 14} ${right} ${y + 6} L ${right} ${bottom} Z`}
       fill={fill}
     />
   );
@@ -154,16 +157,18 @@ function CoralFan({ color }: { color: string }) {
 /** Sonnenlicht: faint shafts of light fanning down from the surface. */
 function ShallowDecor({ raysId }: { raysId: string }) {
   const rays = [];
-  const span = WIDTH + 80;
+  const span = WORLD.width + 80;
+  const top = SCENE.horizonY;
+  const bottom = WORLD.bottom;
   for (let i = 0; i < SCENE.rayCount; i += 1) {
     // Top of each ray spread across the surface; rays widen and slant down.
-    const topX = -40 + (span / SCENE.rayCount) * (i + 0.5);
-    const w = 26;
-    const slant = 36;
+    const topX = WORLD.left - 40 + (span / SCENE.rayCount) * (i + 0.5);
+    const w = 30;
+    const slant = 44;
     rays.push(
       <polygon
         key={i}
-        points={`${topX - w / 2},${SCENE.horizonY} ${topX + w / 2},${SCENE.horizonY} ${topX + slant + w},${HEIGHT} ${topX + slant - w},${HEIGHT}`}
+        points={`${topX - w / 2},${top} ${topX + w / 2},${top} ${topX + slant + w},${bottom} ${topX + slant - w},${bottom}`}
         fill={`url(#${raysId})`}
       />,
     );
@@ -180,13 +185,13 @@ function DeepDecor() {
     seed = (seed * 9301 + 49297) % 233280;
     return seed / 233280;
   };
-  for (let i = 0; i < 14; i += 1) {
-    motes.push({ x: rand() * WIDTH, y: rand() * HEIGHT, r: 1 + rand() * 2 });
+  for (let i = 0; i < 20; i += 1) {
+    motes.push({ x: WORLD.left + rand() * WORLD.width, y: WORLD.top + rand() * WORLD.height, r: 1 + rand() * 2 });
   }
   return (
     <g>
       {/* Darker pool toward the bottom for extra depth. */}
-      <rect x={0} y={HEIGHT * 0.5} width={WIDTH} height={HEIGHT * 0.5} fill="#000000" opacity={0.18} />
+      <rect x={WORLD.left} y={WORLD.top + WORLD.height * 0.5} width={WORLD.width} height={WORLD.height * 0.5} fill="#000000" opacity={0.18} />
       {motes.map((m, i) => (
         <circle key={i} cx={m.x} cy={m.y} r={m.r} fill="#bfe6ee" opacity={0.4} />
       ))}
