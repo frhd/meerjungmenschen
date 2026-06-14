@@ -28,6 +28,36 @@
   color: rgba(240, 248, 255, 0.82);
 }
 
+.mute-toggle {
+  margin-top: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+  color: rgba(240, 248, 255, 0.9);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.mute-toggle:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.mute-toggle:focus-visible {
+  outline: 2px solid rgba(140, 200, 255, 0.8);
+  outline-offset: 2px;
+}
+
+.mute-toggle-label {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
 .app-main {
   width: 100%;
   max-width: 880px;
