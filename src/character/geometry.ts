@@ -21,11 +21,14 @@ export const CX = 160;
 
 // ── Head ─────────────────────────────────────────────────────
 // Slightly egg-shaped head; RX < RY for a cute rounded face.
+// Kept deliberately NARROWER than the shoulder line below so the
+// figure doesn't read as a bobblehead — head width (2·rx) must
+// stay under 2·shoulderHalf for every body type.
 export const HEAD = {
   cx: CX,
-  cy: 96,
-  rx: 50,
-  ry: 56,
+  cy: 88,
+  rx: 42,
+  ry: 47,
 } as const;
 
 /** Y of the chin (bottom of the head). */
@@ -34,25 +37,27 @@ export const CHIN_Y = HEAD.cy + HEAD.ry; // 152
 // ── Neck ─────────────────────────────────────────────────────
 export const NECK = {
   top: CHIN_Y - 14, // tucks up under the chin so there is no gap
-  bottom: 178,
-  halfWidth: 15,
+  bottom: 156,
+  halfWidth: 14,
 } as const;
 
 // ── Shoulders / torso ────────────────────────────────────────
 // shoulderY is where the arms attach and the top of the torso sits.
-export const SHOULDER_Y = 186;
+export const SHOULDER_Y = 166;
 /** Default shoulder half-span; Body widens/narrows this per bodyType. */
 export const SHOULDER_HALF = 58;
 
 export const TORSO = {
   top: SHOULDER_Y,
   /** Collarbone line — necklace + top straps anchor here. */
-  collarY: 196,
-  /** Narrowest point of the figure. */
-  waistY: 300,
-  waistHalf: 40,
-  /** Bust line — tops are centred around here. */
-  bustY: 232,
+  collarY: 176,
+  /** Narrowest point of the figure. Kept fairly high so the tail
+      below gets the majority of the canvas and reads as long. */
+  waistY: 276,
+  waistHalf: 38,
+  /** Bust line — tops are centred around here. Sits high on the
+      chest (≈⅓ down the torso) so the top doesn't read at navel. */
+  bustY: 206,
 } as const;
 
 // ── Per-bodyType silhouette ─────────────────────────────────
@@ -75,11 +80,12 @@ export const BODY_SHAPE: Record<BodyType, BodyShape> = {
   // Wassermann: broad square shoulders, flat chest, strong wide jaw.
   // waistHalf tapers well inside shoulderHalf so the torso V-tapers
   // instead of reading as a rectangular slab.
-  merman: { shoulderHalf: 78, waistHalf: 44, bust: 0, jawHalf: 42 },
+  merman: { shoulderHalf: 74, waistHalf: 40, bust: 0, jawHalf: 38 },
   // In-between everywhere; androgynous.
-  neutral: { shoulderHalf: 58, waistHalf: 42, bust: 7, jawHalf: 32 },
+  neutral: { shoulderHalf: 62, waistHalf: 38, bust: 6, jawHalf: 31 },
   // Meerjungfrau: narrow soft shoulders, cinched waist, soft bust.
-  mermaid: { shoulderHalf: 47, waistHalf: 35, bust: 16, jawHalf: 26 },
+  // shoulderHalf 51 (102px) stays comfortably wider than the head (84px).
+  mermaid: { shoulderHalf: 51, waistHalf: 34, bust: 11, jawHalf: 25 },
 };
 
 
@@ -88,18 +94,23 @@ export const BODY_SHAPE: Record<BodyType, BodyShape> = {
 export const TAIL = {
   /** Where the scaly tail takes over from the skin torso. */
   startY: TORSO.waistY,
-  startHalf: TORSO.waistHalf + 6,
-  /** Hips — widest part of the tail, a generous flare below the waist. */
-  hipY: 348,
-  hipHalf: 64,
+  /** Kept just inside the narrowest skin waist (mermaid, 34) so the
+      tail tucks UNDER the torso at the seam for every body type and
+      no blue ledge pokes out past the hips. */
+  startHalf: 32,
+  /** Hips — widest part of the tail. Kept only a touch wider than the
+      shoulders (mermaid ≈102px) so the figure isn't bottom-heavy. */
+  hipY: 346,
+  hipHalf: 54,
   /** The tail tapers to its thinnest just above the fluke. */
-  ankleY: 456,
+  ankleY: 466,
   ankleHalf: 11,
   /** Vertical extent of the fluke/fin spread. */
-  flukeTopY: 456,
-  flukeBottomY: 500,
-  /** Horizontal reach of a wide fluke from centre. */
-  flukeHalf: 74,
+  flukeTopY: 466,
+  flukeBottomY: 510,
+  /** Horizontal reach of the fluke from centre — modest so the tail
+      ends in a graceful fin rather than a broad paddle. */
+  flukeHalf: 60,
 } as const;
 
 // ── Arms / hands ─────────────────────────────────────────────
@@ -108,8 +119,8 @@ export const TAIL = {
 export const ARM = {
   shoulderY: SHOULDER_Y + 4,
   /** Hand centre offsets from CX (mirrored left/right). */
-  handDX: 64,
-  handY: 300,
+  handDX: 60,
+  handY: 282,
   handRX: 13,
   handRY: 17,
 } as const;
