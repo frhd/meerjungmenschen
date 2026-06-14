@@ -14,6 +14,12 @@ import {
   ACCESSORIES,
   SCENES,
   COMPANIONS,
+  LIP_STYLES,
+  EYESHADOW_STYLES,
+  EYELINER_STYLES,
+  BLUSH_STYLES,
+  FRECKLE_STYLES,
+  MAKEUP_COLORS,
 } from '../data/options';
 import { TabBar, type Tab } from './controls/TabBar';
 import { StylePicker } from './controls/StylePicker';
@@ -26,13 +32,14 @@ interface WardrobeProps {
   onChange: (patch: Partial<Character>) => void;
 }
 
-type TabId = 'body' | 'hair' | 'tail' | 'outfit' | 'welt';
+type TabId = 'body' | 'hair' | 'tail' | 'outfit' | 'makeup' | 'welt';
 
 const TABS: Tab[] = [
   { id: 'body', label: 'Körper' },
   { id: 'hair', label: 'Haare' },
   { id: 'tail', label: 'Schwanz' },
   { id: 'outfit', label: 'Outfit' },
+  { id: 'makeup', label: 'Make-up' },
   { id: 'welt', label: 'Welt' },
 ];
 
@@ -139,6 +146,59 @@ export function Wardrobe({ character, onChange }: WardrobeProps) {
                   },
                 })
               }
+            />
+          </>
+        )}
+
+        {activeTab === 'makeup' && (
+          <>
+            <StylePicker
+              label="Lippenstift"
+              options={LIP_STYLES}
+              selectedId={character.makeup.lips.style}
+              onSelect={(id) => onChange({ makeup: { ...character.makeup, lips: { ...character.makeup.lips, style: id } } })}
+            />
+            <ColorPicker
+              label="Lippenfarbe"
+              options={MAKEUP_COLORS}
+              selectedColor={character.makeup.lips.color}
+              onSelect={(color) => onChange({ makeup: { ...character.makeup, lips: { ...character.makeup.lips, color } } })}
+            />
+            <StylePicker
+              label="Lidschatten"
+              options={EYESHADOW_STYLES}
+              selectedId={character.makeup.eyeshadow.style}
+              onSelect={(id) => onChange({ makeup: { ...character.makeup, eyeshadow: { ...character.makeup.eyeshadow, style: id } } })}
+            />
+            <ColorPicker
+              label="Lidschattenfarbe"
+              options={MAKEUP_COLORS}
+              selectedColor={character.makeup.eyeshadow.color}
+              onSelect={(color) => onChange({ makeup: { ...character.makeup, eyeshadow: { ...character.makeup.eyeshadow, color } } })}
+            />
+            <StylePicker
+              label="Eyeliner & Wimpern"
+              options={EYELINER_STYLES}
+              selectedId={character.makeup.eyeliner}
+              onSelect={(id) => onChange({ makeup: { ...character.makeup, eyeliner: id } })}
+            />
+            <StylePicker
+              label="Rouge"
+              options={BLUSH_STYLES}
+              selectedId={character.makeup.blush.style}
+              onSelect={(id) => onChange({ makeup: { ...character.makeup, blush: { ...character.makeup.blush, style: id } } })}
+            />
+            <ColorPicker
+              label="Rougefarbe"
+              options={MAKEUP_COLORS}
+              selectedColor={character.makeup.blush.color}
+              onSelect={(color) => onChange({ makeup: { ...character.makeup, blush: { ...character.makeup.blush, color } } })}
+            />
+            <StylePicker
+              label="Sommersprossen"
+              options={FRECKLE_STYLES}
+              selectedId={character.makeup.freckles}
+              onSelect={(id) => onChange({ makeup: { ...character.makeup, freckles: id } })}
             />
           </>
         )}

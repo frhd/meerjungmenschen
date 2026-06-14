@@ -113,6 +113,13 @@ describe('CharacterStage', () => {
       tail: { shape: 'zzz', color: '#abcdef', pattern: 'zzz' },
       top: { style: 'zzz', color: '#fedcba' },
       companion: 'zzz',
+      makeup: {
+        lips: { style: 'zzz', color: '#123456' },
+        eyeshadow: { style: 'zzz', color: '#123456' },
+        eyeliner: 'zzz',
+        blush: { style: 'zzz', color: '#123456' },
+        freckles: 'zzz',
+      },
     };
     const markup = render(weird);
     expect(markup).toContain('<svg');
