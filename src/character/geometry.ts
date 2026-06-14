@@ -193,6 +193,35 @@ export const FACE = {
   mouthOpenR: 8,
 } as const;
 
+// ── Makeup anchors (overlay on the face) ─────────────────────
+export const MAKEUP = {
+  lipY: FACE.mouthY,
+  lipHalf: FACE.mouthHalf,
+  /** Eyeshadow sits just above the eye, toward the brow. */
+  shadowDy: -(FACE.eyeRY + 4),
+  /** Deterministic freckle scatter: cheeks (mirrored L/R) + a few on
+      the nose bridge. r is the dot radius. Ordered so a part can take
+      the first N for 'wenig' and all for 'viele'. */
+  freckleDots: [
+    // inner cheeks (closest to nose) — these read first for 'wenig'
+    { x: CX - FACE.cheekDX + 6, y: FACE.cheekY - 2, r: 1.5 },
+    { x: CX + FACE.cheekDX - 6, y: FACE.cheekY - 2, r: 1.5 },
+    { x: CX - 4,                y: FACE.noseY + 2,  r: 1.3 },
+    { x: CX + 4,                y: FACE.noseY + 2,  r: 1.3 },
+    { x: CX - FACE.cheekDX,     y: FACE.cheekY + 3, r: 1.6 },
+    { x: CX + FACE.cheekDX,     y: FACE.cheekY + 3, r: 1.6 },
+    // outer / additional dots — added for 'viele'
+    { x: CX - FACE.cheekDX - 6, y: FACE.cheekY - 1, r: 1.4 },
+    { x: CX + FACE.cheekDX + 6, y: FACE.cheekY - 1, r: 1.4 },
+    { x: CX - FACE.cheekDX + 2, y: FACE.cheekY + 8, r: 1.4 },
+    { x: CX + FACE.cheekDX - 2, y: FACE.cheekY + 8, r: 1.4 },
+    { x: CX - FACE.cheekDX - 3, y: FACE.cheekY + 7, r: 1.3 },
+    { x: CX + FACE.cheekDX + 3, y: FACE.cheekY + 7, r: 1.3 },
+    { x: CX - 1,                y: FACE.noseY - 3,  r: 1.1 },
+    { x: CX + 6,                y: FACE.noseY + 6,  r: 1.2 },
+  ],
+} as const;
+
 // ── Accessory anchors ────────────────────────────────────────
 export const CROWN = {
   /** Crown sits across the top of the head, nestled into the hairline. */

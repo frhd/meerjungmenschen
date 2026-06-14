@@ -152,6 +152,56 @@ export const SCENES: StyleOption[] = [
   { id: 'wreck',   label: 'Schiffswrack' },
 ];
 
+// ── 13. Makeup ───────────────────────────────────────────────
+// ids handled by character/parts/Makeup.tsx. 'none' = off (the
+// safe fallback). lips/eyeshadow/blush share MAKEUP_COLORS.
+
+export const LIP_STYLES: StyleOption[] = [
+  { id: 'none',    label: 'Keine'    },
+  { id: 'klassik', label: 'Klassik'  },
+  { id: 'voll',    label: 'Voll'     },
+  { id: 'herz',    label: 'Herzchen' },
+];
+
+export const EYESHADOW_STYLES: StyleOption[] = [
+  { id: 'none',    label: 'Keiner'  },
+  { id: 'sanft',   label: 'Sanft'   },
+  { id: 'smokey',  label: 'Smokey'  },
+  { id: 'glitzer', label: 'Glitzer' },
+];
+
+export const EYELINER_STYLES: StyleOption[] = [
+  { id: 'none',        label: 'Keiner'      },
+  { id: 'klassik',     label: 'Klassik'     },
+  { id: 'katzenaugen', label: 'Katzenaugen' },
+  { id: 'wimpern',     label: 'Wimpern'     },
+];
+
+export const BLUSH_STYLES: StyleOption[] = [
+  { id: 'none',     label: 'Aus'     },
+  { id: 'sanft',    label: 'Sanft'   },
+  { id: 'kraeftig', label: 'Kräftig' },
+];
+
+export const FRECKLE_STYLES: StyleOption[] = [
+  { id: 'none',  label: 'Keine' },
+  { id: 'wenig', label: 'Wenig' },
+  { id: 'viele', label: 'Viele' },
+];
+
+// Shared cosmetic palette for lips, eyeshadow and blush.
+export const MAKEUP_COLORS: ColorOption[] = [
+  { color: '#d6486a', label: 'Rosa'    },
+  { color: '#e8623c', label: 'Koralle' },
+  { color: '#c0203a', label: 'Kirsche' },
+  { color: '#9c2150', label: 'Beere'   },
+  { color: '#7a3a6a', label: 'Pflaume' },
+  { color: '#8050d0', label: 'Violett' },
+  { color: '#2f6fc8', label: 'Blau'    },
+  { color: '#2aa9c4', label: 'Türkis'  },
+  { color: '#c79a3e', label: 'Gold'    },
+];
+
 // ── 12. Companions ───────────────────────────────────────────
 // A little sea creature swimming beside the merperson. 'none' hides
 // it; Companion.tsx switches on these ids (unknown → 'clownfish').
