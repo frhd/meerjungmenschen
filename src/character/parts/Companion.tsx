@@ -15,9 +15,13 @@ interface CompanionProps {
  * to an absolute canvas coordinate.
  */
 export function Companion({ companion }: CompanionProps) {
+  // useId() must run unconditionally on every render (Rules of Hooks):
+  // calling it after the early `none` return would change the hook count
+  // when the prop toggles, desyncing React's hook list. Mirrors Tail.tsx,
+  // which calls useId() at the very top.
+  const uid = useId();
   if (companion === 'none') return null;
 
-  const uid = useId();
   const { cx, cy, r } = COMPANION;
 
   switch (companion) {
@@ -65,9 +69,18 @@ function Clownfish({ cx, cy, r, uid }: CreatureProps) {
         d={`M ${cx - bw} ${cy} L ${cx - bw - r * 0.5} ${cy - bh * 0.8} L ${cx - bw - r * 0.42} ${cy} L ${cx - bw - r * 0.5} ${cy + bh * 0.8} Z`}
         fill={deep}
       />
-      {/* top + bottom fins */}
-      <path d={`M ${cx - bw * 0.2} ${cy - bh} Q ${cx} ${cy - bh - r * 0.5} ${cx + bw * 0.35} ${cy - bh * 0.6} Z`} fill={deep} />
-      <path d={`M ${cx - bw * 0.2} ${cy + bh} Q ${cx} ${cy + bh + r * 0.4} ${cx + bw * 0.35} ${cy + bh * 0.6} Z`} fill={deep} />
+      {/* top (dorsal) + bottom fins — filled triangular fins sitting on the
+          body. Each is a closed shape: base on the body, an apex curving
+          away, then back along the body to the start (so it fills, rather
+          than collapsing to a thin two-point sliver). */}
+      <path
+        d={`M ${cx - bw * 0.2} ${cy - bh * 0.85} Q ${cx} ${cy - bh - r * 0.55} ${cx + bw * 0.35} ${cy - bh * 0.7} L ${cx + bw * 0.05} ${cy - bh * 0.45} Z`}
+        fill={deep}
+      />
+      <path
+        d={`M ${cx - bw * 0.2} ${cy + bh * 0.85} Q ${cx} ${cy + bh + r * 0.45} ${cx + bw * 0.35} ${cy + bh * 0.7} L ${cx + bw * 0.05} ${cy + bh * 0.45} Z`}
+        fill={deep}
+      />
 
       {/* body */}
       <ellipse cx={cx} cy={cy} rx={bw} ry={bh} fill={`url(#${gradId})`} />
