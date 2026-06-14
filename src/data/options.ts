@@ -122,3 +122,14 @@ export const ACCESSORIES: StyleOption[] = [
   { id: 'necklace', label: 'Halskette' },
   { id: 'earrings', label: 'Ohrringe' },
 ];
+
+// ── 11. Scenes ───────────────────────────────────────────────
+// Underwater backdrops rendered as the BACKMOST layer of the
+// single <svg>. Scene.tsx switches on these ids (default → 'reef').
+
+export const SCENES: StyleOption[] = [
+  { id: 'reef',    label: 'Korallenriff' },
+  { id: 'deep',    label: 'Tiefsee'      },
+  { id: 'shallow', label: 'Sonnenlicht'  },
+  { id: 'wreck',   label: 'Schiffswrack' },
+];

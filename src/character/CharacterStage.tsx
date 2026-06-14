@@ -1,5 +1,6 @@
 import type { Character } from '../types';
 import { VIEWBOX } from './geometry';
+import { Scene } from './parts/Scene';
 import { Body } from './parts/Body';
 import { Tail } from './parts/Tail';
 import { Hair } from './parts/Hair';
@@ -19,7 +20,7 @@ interface CharacterStageProps {
  * All coordinates come from geometry.ts so the parts align.
  */
 export function CharacterStage({ character }: CharacterStageProps) {
-  const { bodyType, skinTone, face, hair, tail, top, nails, accessories } = character;
+  const { bodyType, skinTone, scene, face, hair, tail, top, nails, accessories } = character;
 
   return (
     <svg
@@ -30,6 +31,9 @@ export function CharacterStage({ character }: CharacterStageProps) {
       width="100%"
       height="100%"
     >
+      {/* Underwater backdrop — backmost layer */}
+      <Scene scene={scene} />
+
       {/* Long hair flowing behind the body */}
       <Hair style={hair.style} color={hair.color} layer="back" />
 

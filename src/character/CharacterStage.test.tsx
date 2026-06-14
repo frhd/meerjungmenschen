@@ -8,6 +8,7 @@ import {
   TAIL_SHAPES,
   TAIL_PATTERNS,
   TOPS,
+  SCENES,
 } from '../data/options';
 
 function render(character: Character): string {
@@ -58,6 +59,13 @@ describe('CharacterStage', () => {
     }
   });
 
+  it('renders every scene', () => {
+    for (const s of SCENES) {
+      const markup = render({ ...DEFAULT_CHARACTER, scene: s.id });
+      expect(markup).toContain('<svg');
+    }
+  });
+
   it('renders all accessory on/off combinations', () => {
     for (const crown of [true, false]) {
       for (const necklace of [true, false]) {
@@ -73,6 +81,7 @@ describe('CharacterStage', () => {
     const weird: Character = {
       ...DEFAULT_CHARACTER,
       bodyType: 'mermaid',
+      scene: 'zzz',
       face: 'wat',
       hair: { style: 'zzz', color: '#123456' },
       tail: { shape: 'zzz', color: '#abcdef', pattern: 'zzz' },

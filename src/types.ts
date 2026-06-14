@@ -3,6 +3,7 @@ export type BodyType = 'mermaid' | 'merman' | 'neutral';
 export interface Character {
   bodyType: BodyType;
   skinTone: string;        // hex color
+  scene: string;           // backdrop scene id, e.g. 'reef'
   face: string;            // expression id, e.g. 'smile'
   hair: { style: string; color: string };
   tail: { shape: string; color: string; pattern: string };
@@ -14,6 +15,7 @@ export interface Character {
 export const DEFAULT_CHARACTER: Character = {
   bodyType: 'mermaid',
   skinTone: '#e8b98f',
+  scene: 'reef',
   face: 'smile',
   hair: { style: 'wavy', color: '#3a2a1a' },
   tail: { shape: 'classic', color: '#2aa9c4', pattern: 'scales' },

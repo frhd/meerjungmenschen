@@ -16,6 +16,18 @@ export const VIEWBOX = '0 0 320 520';
 export const WIDTH = 320;
 export const HEIGHT = 520;
 
+// ── Scene / backdrop ─────────────────────────────────────────
+// The backmost layer (Scene.tsx). All scene-decoration coordinates
+// derive from these named anchors so nothing is hardcoded in the part.
+export const SCENE = {
+  /** Top of the seabed sand mound. */
+  seabedY: 472,
+  /** Y where downward light rays fade out (top reach of the rays). */
+  horizonY: 110,
+  /** Number of sunlight ray polygons fanned across the top. */
+  rayCount: 4,
+} as const;
+
 /** Horizontal centre line. Everything is symmetric about this. */
 export const CX = 160;
 
