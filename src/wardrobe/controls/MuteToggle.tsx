@@ -14,15 +14,18 @@ export function MuteToggle() {
     setMutedState(next);
   };
 
-  // When muted, the button's action is to turn sound ON.
-  const label = muted ? 'Ton an' : 'Ton aus';
+  // The button is a "sound on" toggle: aria-pressed reflects whether sound is
+  // currently ON (pressed = unmuted). The visible label describes the same
+  // state ("Ton an" = sound is on, "Ton aus" = sound is off) so the icon,
+  // label, aria-label and aria-pressed all tell one consistent story.
+  const label = muted ? 'Ton aus' : 'Ton an';
 
   return (
     <button
       type="button"
       className="mute-toggle"
-      aria-pressed={muted}
-      aria-label={label}
+      aria-pressed={!muted}
+      aria-label={`Ton: ${muted ? 'aus' : 'an'}`}
       title={label}
       onClick={handleClick}
     >

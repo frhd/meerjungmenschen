@@ -6,6 +6,9 @@ import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
 // module fresh (vi.resetModules) so its `muted` state is read cleanly.
 
 let oscCount = 0;
+// Every oscillator the fake creates is pushed here so tests can inspect its
+// spies (e.g. assert .stop() was called when ambience is torn down).
+let oscillators: Array<{ start: ReturnType<typeof vi.fn>; stop: ReturnType<typeof vi.fn> }> = [];
 
 function makeParam() {
   return {
@@ -21,7 +24,7 @@ class FakeAudioContext {
   resume = vi.fn(() => Promise.resolve());
   createOscillator() {
     oscCount += 1;
-    return {
+    const osc = {
       type: 'sine',
       frequency: makeParam(),
       connect: vi.fn(),
@@ -30,6 +33,8 @@ class FakeAudioContext {
       stop: vi.fn(),
       onended: null as null | (() => void),
     };
+    oscillators.push(osc);
+    return osc;
   }
   createGain() {
     return {
@@ -64,6 +69,7 @@ async function freshModule() {
 
 beforeEach(() => {
   oscCount = 0;
+  oscillators = [];
   localStorage.clear();
   installAudio();
 });
@@ -127,6 +133,28 @@ describe('sound module', () => {
     sound.setMuted(false);
     // Ambience uses oscillators (drone + LFO).
     expect(oscCount).toBeGreaterThan(0);
+  });
+
+  it('does not start ambience twice on a second unmute', async () => {
+    const sound = await freshModule();
+    sound.setMuted(false);
+    const afterFirst = oscCount;
+    expect(afterFirst).toBeGreaterThan(0);
+    // Second unmute without an intervening mute: the `if (ambience) return`
+    // guard must hold, so no new ambience oscillators are created.
+    sound.setMuted(false);
+    expect(oscCount).toBe(afterFirst);
+  });
+
+  it('stops the ambience oscillators when re-muted', async () => {
+    const sound = await freshModule();
+    sound.setMuted(false);
+    const ambienceOscs = [...oscillators]; // drone + LFO created on unmute
+    expect(ambienceOscs.length).toBeGreaterThan(0);
+    sound.setMuted(true);
+    for (const osc of ambienceOscs) {
+      expect(osc.stop).toHaveBeenCalled();
+    }
   });
 
   it('is a safe no-op when AudioContext is undefined', async () => {
