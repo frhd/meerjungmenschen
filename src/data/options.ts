@@ -50,7 +50,7 @@ export const FACE_EXPRESSIONS: StyleOption[] = [
 ];
 
 // ── 4. Hair styles ───────────────────────────────────────────
-// ids: 'wavy' | 'long' | 'bun' | 'short' | 'ponytail'
+// ids: 'wavy' | 'long' | 'bun' | 'short' | 'ponytail' | 'braids' | 'pixie'
 
 export const HAIR_STYLES: StyleOption[] = [
   { id: 'wavy',     label: 'Wellig'    },
@@ -58,6 +58,8 @@ export const HAIR_STYLES: StyleOption[] = [
   { id: 'bun',      label: 'Dutt'      },
   { id: 'short',    label: 'Kurz'      },
   { id: 'ponytail', label: 'Zopf'      },
+  { id: 'braids',   label: 'Zöpfe'     },
+  { id: 'pixie',    label: 'Pixie'     },
 ];
 
 // ── 4. Hair colors ───────────────────────────────────────────
@@ -74,12 +76,13 @@ export const HAIR_COLORS: ColorOption[] = [
 ];
 
 // ── 5. Tail shapes ───────────────────────────────────────────
-// ids: 'classic' | 'fluke' | 'fin'
+// ids: 'classic' | 'fluke' | 'fin' | 'double'
 
 export const TAIL_SHAPES: StyleOption[] = [
-  { id: 'classic', label: 'Klassisch' },
-  { id: 'fluke',   label: 'Flossen'   },
-  { id: 'fin',     label: 'Fächer'    },
+  { id: 'classic', label: 'Klassisch'    },
+  { id: 'fluke',   label: 'Flossen'      },
+  { id: 'fin',     label: 'Fächer'       },
+  { id: 'double',  label: 'Doppelflosse' },
 ];
 
 // ── 6. Tail colors ───────────────────────────────────────────
@@ -105,13 +108,15 @@ export const TAIL_PATTERNS: StyleOption[] = [
 ];
 
 // ── 8. Tops ──────────────────────────────────────────────────
-// ids: 'shell' | 'strap' | 'wrap' | 'none'
+// ids: 'shell' | 'strap' | 'wrap' | 'crisscross' | 'pearl' | 'none'
 
 export const TOPS: StyleOption[] = [
-  { id: 'shell', label: 'Muschel'  },
-  { id: 'strap', label: 'Träger'   },
-  { id: 'wrap',  label: 'Wickel'   },
-  { id: 'none',  label: 'Ohne'     },
+  { id: 'shell',      label: 'Muschel'  },
+  { id: 'strap',      label: 'Träger'   },
+  { id: 'wrap',       label: 'Wickel'   },
+  { id: 'crisscross', label: 'Kreuz'    },
+  { id: 'pearl',      label: 'Perlen'   },
+  { id: 'none',       label: 'Ohne'     },
 ];
 
 // ── 9. Nail colors ───────────────────────────────────────────

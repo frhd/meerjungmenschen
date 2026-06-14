@@ -46,8 +46,32 @@ function backLengths(style: string, color: string, dark: string) {
 
   switch (style) {
     case 'short':
-      // No length behind.
+    case 'pixie':
+      // No length behind (cropped styles).
       return null;
+
+    case 'braids': {
+      // Long flowing mass behind, like `long` but softly rounded at the
+      // hem — the two plaits come forward in the front layer.
+      const hemY = TORSO.waistY + 50;
+      const outerL = sideL - 10;
+      const outerR = sideR + 10;
+      return (
+        <path
+          d={[
+            `M ${sideL + 6} ${HEAD.cy - 24}`,
+            `C ${outerL} ${HEAD.cy} ${outerL} ${TORSO.bustY} ${outerL} ${hemY - 24}`,
+            `Q ${outerL} ${hemY} ${CX - 16} ${hemY + 4}`,
+            `L ${CX + 16} ${hemY + 4}`,
+            `Q ${outerR} ${hemY} ${outerR} ${hemY - 24}`,
+            `C ${outerR} ${TORSO.bustY} ${outerR} ${HEAD.cy} ${sideR - 6} ${HEAD.cy - 24}`,
+            `C ${CX + 30} ${HEAD.cy - 40} ${CX - 30} ${HEAD.cy - 40} ${sideL + 6} ${HEAD.cy - 24}`,
+            'Z',
+          ].join(' ')}
+          fill={color}
+        />
+      );
+    }
 
     case 'bun': {
       // A round bun peeking above the head + short nape.
@@ -239,6 +263,84 @@ function frontCap(style: string, color: string, dark: string) {
           )}
           fill={color}
         />
+      );
+    }
+
+    case 'pixie': {
+      // Cropped pixie: a close dome with a longer side-swept fringe that
+      // sweeps across to one side, plus a wispy pointed sideburn.
+      return (
+        <>
+          <path
+            d={dome(
+              `C ${sideR - 4} ${HEAD.cy - 2} ${sideR - 12} ${browY - 10} ${CX + 18} ${browY - 2}` +
+                ` Q ${CX - 4} ${browY + 10} ${sideL + 10} ${HEAD.cy - 8}` +
+                ` Q ${sideL + 2} ${HEAD.cy + 2} ${sideL - 2} ${HEAD.cy + 6}`,
+            )}
+            fill={color}
+          />
+          {/* side-swept fringe sweep line */}
+          <path
+            d={`M ${CX + 18} ${browY - 2} Q ${CX - 2} ${browY + 8} ${sideL + 12} ${HEAD.cy - 6}`}
+            fill="none"
+            stroke={dark}
+            strokeWidth={2}
+            opacity={0.4}
+          />
+          {/* little tapered sideburn */}
+          <path
+            d={`M ${sideR + 2} ${HEAD.cy} Q ${sideR} ${HEAD.cy + 10} ${sideR - 6} ${HEAD.cy + 8}`}
+            fill={color}
+          />
+        </>
+      );
+    }
+
+    case 'braids': {
+      // Centre-parted bangs (like long) PLUS two braided plaits coming
+      // forward over the shoulders — each a stack of stitched lobes.
+      const braidTopY = HEAD.cy + 6;
+      const braidBottomY = TORSO.bustY + 20;
+      const seg = 12;
+      // The two plaits drawn as overlapping ellipses (knot-like segments).
+      const segments: Array<{ x: number; y: number }> = [];
+      for (const bx of [sideL + 6, sideR - 6]) {
+        for (let y = braidTopY; y <= braidBottomY; y += seg) {
+          segments.push({ x: bx, y });
+        }
+      }
+      return (
+        <>
+          <path
+            d={dome(
+              `C ${sideR - 4} ${HEAD.cy} ${sideR - 20} ${browY} ${CX + 6} ${browY + 6}` +
+                ` Q ${CX} ${browY - 4} ${CX - 6} ${browY + 6}` +
+                ` C ${sideL + 20} ${browY} ${sideL + 4} ${HEAD.cy} ${sideL - 2} ${HEAD.cy + 6}`,
+            )}
+            fill={color}
+          />
+          {/* centre part line */}
+          <path
+            d={`M ${CX} ${topY + 4} L ${CX} ${browY + 2}`}
+            stroke={dark}
+            strokeWidth={2}
+            opacity={0.3}
+          />
+          {/* two braided plaits down the sides */}
+          {segments.map((s, i) => (
+            <ellipse
+              key={i}
+              cx={s.x + (i % 2 === 0 ? -3 : 3)}
+              cy={s.y}
+              rx={9}
+              ry={8}
+              fill={color}
+              stroke={dark}
+              strokeWidth={1.5}
+              opacity={0.95}
+            />
+          ))}
+        </>
       );
     }
 

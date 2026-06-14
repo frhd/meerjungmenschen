@@ -147,6 +147,24 @@ function flukePath(shape: string): string {
         'Z',
       ].join(' ');
     }
+    case 'double': {
+      // Double-fluke: two distinct lobes splayed left and right with a
+      // deep central notch cut up toward the ankle, like a whale tail
+      // sliced in two. Each lobe is its own rounded paddle.
+      const notchY = ay + 16; // how high the central split rises
+      const lobe = (dir: number) =>
+        [
+          `M ${CX + dir * 4} ${ay - 4}`,
+          // outward and down to the broad outer tip
+          `C ${CX + dir * 24} ${ay + 8} ${CX + dir * fh} ${ay + 10} ${CX + dir * (fh + 2)} ${by - 6}`,
+          // round the outer tip back toward the centre, along the bottom
+          `Q ${CX + dir * (fh - 6)} ${by + 4} ${CX + dir * 18} ${by - 6}`,
+          // up into the deep central notch
+          `Q ${CX + dir * 8} ${notchY + 12} ${CX + dir * 4} ${notchY} `,
+          'Z',
+        ].join(' ');
+      return `${lobe(-1)} ${lobe(1)}`;
+    }
     case 'fin': {
       // Fan/veil tail: tall and frilly, but with softened, flowing
       // points — the tips are rounded and the notches between them are
