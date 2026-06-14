@@ -1,16 +1,10 @@
+import { useId } from 'react';
 import { TAIL, CX } from '../geometry';
 
 interface TailProps {
   shape: string;
   color: string;
   pattern: string;
-}
-
-/** Unique-enough id base so multiple stages on a page do not clash. */
-let counter = 0;
-function nextId(prefix: string) {
-  counter += 1;
-  return `${prefix}-${counter}`;
 }
 
 /** Height of the rect used to tile a scale/pattern over the whole tail. */
@@ -24,8 +18,10 @@ export function Tail({ shape, color, pattern }: TailProps) {
   const dark = `color-mix(in srgb, ${color} 78%, #000 22%)`;
   const light = `color-mix(in srgb, ${color} 78%, #fff 22%)`;
 
-  const clipId = nextId('tail-clip');
-  const scaleId = nextId('tail-scales');
+  // Stable, collision-free ids (keeps the component a pure function of props).
+  const uid = useId();
+  const clipId = `tail-clip-${uid}`;
+  const scaleId = `tail-scales-${uid}`;
 
   // Tapering body of the tail: a smooth flared hip flowing into a
   // graceful S-curve down to the slim ankle just above the fluke.
