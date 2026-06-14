@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import { useState } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom/vitest';
 import { Wardrobe } from './Wardrobe';
@@ -23,6 +23,11 @@ function Harness({ onState }: { onState?: (c: Character) => void }) {
     />
   );
 }
+
+// No global Vitest `environment`/`globals` is configured (see vite.config.ts),
+// so @testing-library/react's auto-cleanup is not registered. Unmount between
+// tests explicitly to keep them isolated.
+afterEach(cleanup);
 
 describe('Wardrobe', () => {
   it('selecting a hair style updates hair.style and preserves hair.color', async () => {
