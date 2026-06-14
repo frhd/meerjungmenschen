@@ -1,11 +1,9 @@
 // @vitest-environment jsdom
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useState } from 'react';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom/vitest';
-
-afterEach(cleanup);
 import { Wardrobe } from './Wardrobe';
 import { DEFAULT_CHARACTER, type Character } from '../types';
 

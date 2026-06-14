@@ -18,9 +18,11 @@ export function TabBar({ tabs, activeId, onSelect }: TabBarProps) {
         return (
           <button
             key={tab.id}
+            id={`wd-tab-${tab.id}`}
             type="button"
             role="tab"
             aria-selected={selected}
+            aria-controls="wd-panel"
             className={`wd-tab${selected ? ' is-active' : ''}`}
             onClick={() => onSelect(tab.id)}
           >

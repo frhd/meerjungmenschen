@@ -39,7 +39,7 @@ export function Wardrobe({ character, onChange }: WardrobeProps) {
     <div className="wardrobe">
       <TabBar tabs={TABS} activeId={activeTab} onSelect={(id) => setActiveTab(id as TabId)} />
 
-      <div className="wd-panel" role="tabpanel">
+      <div className="wd-panel" role="tabpanel" id="wd-panel" aria-labelledby={`wd-tab-${activeTab}`}>
         {activeTab === 'body' && (
           <>
             <StylePicker
@@ -107,7 +107,7 @@ export function Wardrobe({ character, onChange }: WardrobeProps) {
             />
             <ColorPicker
               label="Oberteilfarbe"
-              options={NAIL_COLORS}
+              options={NAIL_COLORS} // top reuses the nail-polish palette by design (no dedicated TOP_COLORS catalog)
               selectedColor={character.top.color}
               onSelect={(color) => onChange({ top: { ...character.top, color } })}
             />
