@@ -80,38 +80,106 @@ function backLengths(style: string, color: string, dark: string) {
     }
 
     case 'long': {
-      // Straight long hair framing both sides down past the waist.
+      // SLEEK + STRAIGHT, very long: hair drops in near-vertical
+      // straight columns well past the waist with a clean flat hem.
+      // Deliberately NO undulation on the outer edges — the contrast
+      // with `wavy` is the whole point.
+      const hemY = TORSO.waistY + 70; // very long
+      const outerL = sideL - 12;
+      const outerR = sideR + 12;
       return (
-        <path
-          d={[
-            `M ${sideL + 6} ${HEAD.cy - 24}`,
-            `C ${sideL - 22} ${HEAD.cy} ${sideL - 26} ${TORSO.bustY} ${sideL - 8} ${TORSO.waistY + 6}`,
-            `C ${CX - 28} ${TORSO.waistY + 18} ${CX + 28} ${TORSO.waistY + 18} ${sideR + 8} ${TORSO.waistY + 6}`,
-            `C ${sideR + 26} ${TORSO.bustY} ${sideR + 22} ${HEAD.cy} ${sideR - 6} ${HEAD.cy - 24}`,
-            `C ${CX + 30} ${HEAD.cy - 40} ${CX - 30} ${HEAD.cy - 40} ${sideL + 6} ${HEAD.cy - 24}`,
-            'Z',
-          ].join(' ')}
-          fill={color}
-        />
+        <>
+          <path
+            d={[
+              `M ${sideL + 6} ${HEAD.cy - 24}`,
+              // straight left flank, barely tapering
+              `C ${outerL} ${HEAD.cy} ${outerL} ${TORSO.bustY} ${outerL + 2} ${hemY - 16}`,
+              // clean, almost-flat hem
+              `Q ${outerL + 2} ${hemY} ${outerL + 12} ${hemY}`,
+              `L ${outerR - 12} ${hemY}`,
+              `Q ${outerR - 2} ${hemY} ${outerR - 2} ${hemY - 16}`,
+              // straight right flank
+              `C ${outerR} ${TORSO.bustY} ${outerR} ${HEAD.cy} ${sideR - 6} ${HEAD.cy - 24}`,
+              `C ${CX + 30} ${HEAD.cy - 40} ${CX - 30} ${HEAD.cy - 40} ${sideL + 6} ${HEAD.cy - 24}`,
+              'Z',
+            ].join(' ')}
+            fill={color}
+          />
+          {/* sleek straight strand lines for a glossy, ironed look */}
+          {[-1, 1].map((sgn) => (
+            <path
+              key={sgn}
+              d={`M ${CX + sgn * (HEAD.rx - 4)} ${HEAD.cy + 10} L ${CX + sgn * (HEAD.rx + 4)} ${hemY - 18}`}
+              stroke={dark}
+              strokeWidth={2}
+              opacity={0.3}
+              strokeLinecap="round"
+            />
+          ))}
+        </>
       );
     }
 
     case 'wavy':
     default: {
-      // Wavy long hair with scalloped, flowing ends.
+      // WAVY/CURLY: both outer edges undulate in a clear scalloped
+      // ripple all the way down, and the hem is a row of round curls.
+      // Built procedurally so the wave is unmistakable at a glance.
+      const topL = HEAD.cy - 24;
+      const startY = HEAD.cy + 6;
+      const hemY = TORSO.waistY + 24;
+      const span = hemY - startY;
+      const waves = 4; // ripples per flank
+      const baseL = sideL - 10; // mean x of left flank
+      const baseR = sideR + 10;
+      const amp = 12; // how far the ripple swings out/in
+
+      const seg = span / waves;
+      // Undulating flank, drawn TOP → BOTTOM. `dir` = -1 left, +1 right;
+      // the outward swing is on the body's own side so both edges ripple.
+      const flankDown = (baseX: number, dir: number) => {
+        let d = '';
+        for (let i = 0; i < waves; i += 1) {
+          const y1 = startY + seg * (i + 1);
+          const cx1 = baseX + dir * amp;
+          const cx2 = baseX - dir * amp * 0.4;
+          d += `C ${cx1} ${y1 - seg * 0.75} ${cx2} ${y1 - seg * 0.25} ${baseX} ${y1} `;
+        }
+        return d;
+      };
+      // Same ripple, drawn BOTTOM → TOP for the return up the right flank.
+      const flankUp = (baseX: number, dir: number) => {
+        let d = '';
+        for (let i = waves - 1; i >= 0; i -= 1) {
+          const y0 = startY + seg * i;
+          const cx1 = baseX + dir * amp;
+          const cx2 = baseX - dir * amp * 0.4;
+          d += `C ${cx1} ${y0 + seg * 0.75} ${cx2} ${y0 + seg * 0.25} ${baseX} ${y0} `;
+        }
+        return d;
+      };
+
+      // Scalloped curly hem: a row of round lobes (left → right).
+      const lobeY = hemY;
+      const hem =
+        `Q ${CX - 40} ${lobeY + 16} ${CX - 20} ${lobeY + 6} ` +
+        `Q ${CX - 8} ${lobeY + 22} ${CX} ${lobeY + 8} ` +
+        `Q ${CX + 8} ${lobeY + 22} ${CX + 20} ${lobeY + 6} ` +
+        `Q ${CX + 40} ${lobeY + 16} ${baseR} ${hemY} `;
+
       return (
         <path
           d={[
-            `M ${sideL + 6} ${HEAD.cy - 24}`,
-            `C ${sideL - 26} ${HEAD.cy} ${sideL - 18} ${TORSO.bustY - 10} ${sideL - 22} ${TORSO.bustY + 20}`,
-            `C ${sideL - 26} ${TORSO.waistY - 30} ${sideL + 4} ${TORSO.waistY - 10} ${sideL - 6} ${TORSO.waistY + 14}`,
-            // scalloped bottom edge
-            `Q ${CX - 36} ${TORSO.waistY - 2} ${CX - 18} ${TORSO.waistY + 18}`,
-            `Q ${CX} ${TORSO.waistY - 2} ${CX + 18} ${TORSO.waistY + 18}`,
-            `Q ${CX + 36} ${TORSO.waistY - 2} ${sideR + 6} ${TORSO.waistY + 14}`,
-            `C ${sideR - 4} ${TORSO.waistY - 10} ${sideR + 26} ${TORSO.waistY - 30} ${sideR + 22} ${TORSO.bustY + 20}`,
-            `C ${sideR + 18} ${TORSO.bustY - 10} ${sideR + 26} ${HEAD.cy} ${sideR - 6} ${HEAD.cy - 24}`,
-            `C ${CX + 30} ${HEAD.cy - 40} ${CX - 30} ${HEAD.cy - 40} ${sideL + 6} ${HEAD.cy - 24}`,
+            `M ${sideL + 6} ${topL}`,
+            `C ${baseL - 4} ${HEAD.cy - 6} ${baseL} ${startY - 8} ${baseL} ${startY}`,
+            // down the rippling left flank
+            flankDown(baseL, -1),
+            // cross the bottom with curly lobes (left → right)
+            hem,
+            // up the rippling right flank
+            flankUp(baseR, 1),
+            `C ${baseR} ${startY - 8} ${baseR + 4} ${HEAD.cy - 6} ${sideR - 6} ${topL}`,
+            `C ${CX + 30} ${HEAD.cy - 40} ${CX - 30} ${HEAD.cy - 40} ${sideL + 6} ${topL}`,
             'Z',
           ].join(' ')}
           fill={color}

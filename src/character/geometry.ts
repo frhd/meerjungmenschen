@@ -53,6 +53,34 @@ export const TORSO = {
   bustY: 232,
 } as const;
 
+// ── Per-bodyType silhouette ─────────────────────────────────
+// SINGLE SOURCE for the at-a-glance differences between body
+// types. Body.tsx reads these so the only thing that changes is
+// the numbers here — no magic numbers scattered in the path.
+//   - shoulderHalf : half-span of the shoulder line (broadness)
+//   - waistHalf    : half-span at the waist (cinch vs. straight)
+//   - bust         : outward bulge of the chest contour (skin,
+//                    independent of the Top). 0 = flat chest.
+//   - jawHalf      : half-width of the jaw shadow / squareness
+export interface BodyShape {
+  shoulderHalf: number;
+  waistHalf: number;
+  bust: number;
+  jawHalf: number;
+}
+
+export const BODY_SHAPE: Record<BodyTypeId, BodyShape> = {
+  // Wassermann: broad square shoulders, flat chest, strong wide jaw.
+  merman: { shoulderHalf: 78, waistHalf: 52, bust: 0, jawHalf: 42 },
+  // In-between everywhere; androgynous.
+  neutral: { shoulderHalf: 58, waistHalf: 42, bust: 7, jawHalf: 32 },
+  // Meerjungfrau: narrow soft shoulders, cinched waist, soft bust.
+  mermaid: { shoulderHalf: 47, waistHalf: 35, bust: 16, jawHalf: 26 },
+};
+
+/** Body type ids (kept local so geometry has no import cycle with types). */
+export type BodyTypeId = 'mermaid' | 'merman' | 'neutral';
+
 // ── Tail ─────────────────────────────────────────────────────
 // The tail begins at the waist and flows down to the fluke.
 export const TAIL = {

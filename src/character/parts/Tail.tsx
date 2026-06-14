@@ -153,18 +153,28 @@ function flukePath(shape: string): string {
       ].join(' ');
     }
     case 'fin': {
-      // Fan/veil tail: tall, frilly, several points.
+      // Fan/veil tail: tall and frilly, but with softened, flowing
+      // points — the tips are rounded and the notches between them are
+      // smooth scallops instead of sharp angular Vs.
       const tips = [-fh, -fh * 0.55, 0, fh * 0.55, fh];
       let d = `M ${CX - ax} ${ay - 6} `;
+      // smooth swoop from the ankle out to the first (leftmost) tip
+      d += `C ${CX - fh * 0.5} ${ay + 8} ${CX + tips[0] + 6} ${by - 30} ${CX + tips[0]} ${by} `;
       tips.forEach((t, i) => {
-        const depth = i % 2 === 0 ? by : by - 22;
-        d += `L ${CX + t} ${depth} `;
         if (i < tips.length - 1) {
-          const mid = (t + tips[i + 1]) / 2;
-          d += `L ${CX + mid} ${ay + 24} `;
+          const next = tips[i + 1];
+          const mid = (t + next) / 2;
+          // round the current tip, dip up into a smooth notch, then
+          // round back down onto the next tip
+          const notchY = ay + 24;
+          const nextDepth = (i + 1) % 2 === 0 ? by : by - 22;
+          d += `Q ${CX + t} ${by + 4} ${CX + mid} ${notchY} `;
+          d += `Q ${CX + next} ${nextDepth - 6} ${CX + next} ${nextDepth} `;
         }
       });
-      d += `L ${CX + ax} ${ay - 6} Z`;
+      // smooth swoop back from the last (rightmost) tip to the ankle
+      d += `C ${CX + tips[tips.length - 1] - 6} ${by - 30} ${CX + fh * 0.5} ${ay + 8} ${CX + ax} ${ay - 6} `;
+      d += 'Z';
       return d;
     }
     case 'classic':
