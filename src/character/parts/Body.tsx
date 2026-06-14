@@ -37,18 +37,32 @@ export function Body({ skinTone, bodyType }: BodyProps) {
   // Bust line y where the chest contour sits (skin).
   const bY = TORSO.bustY;
 
-  // Torso path: square/soft shoulders → chest contour → cinched waist.
-  // Drawn symmetric, left side first.
+  // Waist corner rounding: the side wall eases into the bottom edge with
+  // a quarter-curve instead of meeting it at a sharp right angle, and the
+  // bottom edge itself dips as a gentle belly curve rather than a ruler-
+  // straight line. `waistRound` is how far in from the side the corner
+  // turns; `bellyDrop` how much the bottom edge bows down at centre.
+  const waistRound = 10 + square * 6; // broader bodies get a rounder turn
+  const bellyDrop = 8; // gentle convex curve along the bottom edge
+  const wY = TORSO.waistY;
+
+  // Torso path: square/soft shoulders → chest contour → tapered, rounded
+  // waist. Drawn symmetric, left side first.
   const torso = [
     `M ${CX - sH} ${SHOULDER_Y + shoulderDrop}`,
     // shoulder → chest: a dip then the bust bulge (bust=0 ⇒ flat)
     `C ${CX - sH} ${bY - 24} ${CX - wH - 18 - bust} ${bY - 18} ${CX - wH - 12 - bust} ${bY}`,
     `C ${CX - wH - 10 - bust} ${bY + 10 + bust * 0.5} ${CX - wH - 8} ${bY + 8} ${CX - wH - 6} ${bY + 12}`,
-    // chest → cinched waist
-    `C ${CX - wH - 12} ${TORSO.waistY - 30} ${CX - wH} ${TORSO.waistY - 10} ${CX - wH} ${TORSO.waistY}`,
-    `L ${CX + wH} ${TORSO.waistY}`,
+    // chest → waist side wall, tapering inward toward the cinch
+    `C ${CX - wH - 12} ${wY - 30} ${CX - wH} ${wY - 18} ${CX - wH} ${wY - waistRound}`,
+    // rounded bottom-left corner: side wall curves into the bottom edge
+    `Q ${CX - wH} ${wY} ${CX - wH + waistRound} ${wY}`,
+    // bottom edge: a gentle convex belly curve across to the right corner
+    `Q ${CX} ${wY + bellyDrop} ${CX + wH - waistRound} ${wY}`,
+    // rounded bottom-right corner
+    `Q ${CX + wH} ${wY} ${CX + wH} ${wY - waistRound}`,
     // right side mirrored: waist → chest
-    `C ${CX + wH} ${TORSO.waistY - 10} ${CX + wH + 12} ${TORSO.waistY - 30} ${CX + wH + 6} ${bY + 12}`,
+    `C ${CX + wH} ${wY - 18} ${CX + wH + 12} ${wY - 30} ${CX + wH + 6} ${bY + 12}`,
     `C ${CX + wH + 8} ${bY + 8} ${CX + wH + 10 + bust} ${bY + 10 + bust * 0.5} ${CX + wH + 12 + bust} ${bY}`,
     `C ${CX + wH + 18 + bust} ${bY - 18} ${CX + sH} ${bY - 24} ${CX + sH} ${SHOULDER_Y + shoulderDrop}`,
     // shoulder top edge: flat (square) for merman, gently domed for mermaid
@@ -97,6 +111,45 @@ export function Body({ skinTone, bodyType }: BodyProps) {
 
       {/* Torso */}
       <path d={torso} fill={skinTone} />
+
+      {/* Soft 3D FORM on the torso — reads on every skin tone because it
+          is layered light/shadow derived from the skin itself (never a
+          flat dark band). Order: side/under shadows first, then the broad
+          upper-chest highlight on top so the volume rounds outward.
+          These wrap the whole torso so even the flat broad merman chest
+          looks like a shaded volume rather than a dark slab. */}
+      {/* Side shading: a soft shadow down each flank, fading toward the
+          centre, so the torso turns away into shadow at the edges. */}
+      {[-1, 1].map((sgn) => (
+        <path
+          key={`flank${sgn}`}
+          d={`M ${CX + sgn * (sH - 6)} ${SHOULDER_Y + shoulderDrop + 6}
+              C ${CX + sgn * (sH - 4)} ${bY - 10} ${CX + sgn * (wH + 2)} ${bY + 12} ${CX + sgn * (wH + 2)} ${TORSO.waistY - 18}
+              C ${CX + sgn * (wH - 10)} ${bY + 18} ${CX + sgn * (wH - 4)} ${bY - 6} ${CX + sgn * (sH - 22)} ${SHOULDER_Y + shoulderDrop + 10} Z`}
+          fill={shadow}
+          opacity={0.22}
+        />
+      ))}
+      {/* Under-ribcage shadow: a soft crescent low on the torso that lets
+          the belly read as a rounded surface above the waist. */}
+      <path
+        d={`M ${CX - wH + 6} ${TORSO.waistY - 30}
+            Q ${CX} ${TORSO.waistY - 6} ${CX + wH - 6} ${TORSO.waistY - 30}
+            Q ${CX} ${TORSO.waistY - 18} ${CX - wH + 6} ${TORSO.waistY - 30} Z`}
+        fill={shadow}
+        opacity={0.18}
+      />
+      {/* Broad upper-chest highlight: a wide soft dome of light across the
+          top of the chest so the merman's flat chest catches the light and
+          rounds forward. Scales with shoulder width. */}
+      <ellipse
+        cx={CX}
+        cy={bY - 12}
+        rx={Math.max(20, wH * 0.85)}
+        ry={20}
+        fill={light}
+        opacity={0.3}
+      />
       {/* Soft central highlight on the torso for depth */}
       <path
         d={`M ${CX - 10} ${TORSO.bustY} Q ${CX} ${TORSO.waistY - 20} ${CX - 4} ${TORSO.waistY - 4} Q ${CX + 6} ${TORSO.bustY + 20} ${CX - 10} ${TORSO.bustY} Z`}

@@ -73,7 +73,9 @@ export interface BodyShape {
 
 export const BODY_SHAPE: Record<BodyType, BodyShape> = {
   // Wassermann: broad square shoulders, flat chest, strong wide jaw.
-  merman: { shoulderHalf: 78, waistHalf: 52, bust: 0, jawHalf: 42 },
+  // waistHalf tapers well inside shoulderHalf so the torso V-tapers
+  // instead of reading as a rectangular slab.
+  merman: { shoulderHalf: 78, waistHalf: 44, bust: 0, jawHalf: 42 },
   // In-between everywhere; androgynous.
   neutral: { shoulderHalf: 58, waistHalf: 42, bust: 7, jawHalf: 32 },
   // Meerjungfrau: narrow soft shoulders, cinched waist, soft bust.
