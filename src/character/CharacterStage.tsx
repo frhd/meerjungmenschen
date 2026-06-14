@@ -7,6 +7,7 @@ import { Tail } from './parts/Tail';
 import { Hair } from './parts/Hair';
 import { Top } from './parts/Top';
 import { Face } from './parts/Face';
+import { Makeup } from './parts/Makeup';
 import { Nails } from './parts/Nails';
 import { Accessories } from './parts/Accessories';
 import { Companion } from './parts/Companion';
@@ -22,7 +23,7 @@ interface CharacterStageProps {
  * All coordinates come from geometry.ts so the parts align.
  */
 export function CharacterStage({ character }: CharacterStageProps) {
-  const { bodyType, skinTone, scene, face, hair, tail, top, nails, accessories, companion } = character;
+  const { bodyType, skinTone, scene, face, hair, tail, top, nails, makeup, accessories, companion } = character;
 
   return (
     <svg
@@ -63,6 +64,9 @@ export function CharacterStage({ character }: CharacterStageProps) {
 
         {/* Facial features */}
         <Face expression={face} skinTone={skinTone} />
+
+        {/* Cosmetic overlay painted on top of the face */}
+        <Makeup makeup={makeup} skinTone={skinTone} />
 
         {/* Front hair cap + bangs framing the face (static, stays on the face) */}
         <Hair style={hair.style} color={hair.color} layer="front" />
