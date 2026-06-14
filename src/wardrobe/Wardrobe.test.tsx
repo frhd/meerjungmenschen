@@ -106,4 +106,35 @@ describe('Wardrobe', () => {
     expect(latest.tail.shape).toBe(DEFAULT_CHARACTER.tail.shape);
     expect(latest.tail.color).toBe(DEFAULT_CHARACTER.tail.color);
   });
+
+  it('selecting a scene on the Welt tab updates scene', async () => {
+    const user = userEvent.setup();
+    let latest: Character = DEFAULT_CHARACTER;
+    render(<Harness onState={(c) => (latest = c)} />);
+
+    await user.click(screen.getByRole('tab', { name: 'Welt' }));
+
+    const deep = screen.getByRole('button', { name: 'Tiefsee' });
+    expect(deep).toHaveAttribute('aria-pressed', 'false');
+    await user.click(deep);
+
+    expect(latest.scene).toBe('deep');
+    expect(screen.getByRole('button', { name: 'Tiefsee' })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('selecting a companion on the Welt tab updates companion', async () => {
+    const user = userEvent.setup();
+    let latest: Character = DEFAULT_CHARACTER;
+    render(<Harness onState={(c) => (latest = c)} />);
+
+    await user.click(screen.getByRole('tab', { name: 'Welt' }));
+
+    const seahorse = screen.getByRole('button', { name: 'Seepferdchen' });
+    expect(seahorse).toHaveAttribute('aria-pressed', 'false');
+    await user.click(seahorse);
+
+    expect(latest.companion).toBe('seahorse');
+    expect(latest.scene).toBe(DEFAULT_CHARACTER.scene);
+    expect(screen.getByRole('button', { name: 'Seepferdchen' })).toHaveAttribute('aria-pressed', 'true');
+  });
 });

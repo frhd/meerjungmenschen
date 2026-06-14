@@ -12,6 +12,8 @@ import {
   TOPS,
   NAIL_COLORS,
   ACCESSORIES,
+  SCENES,
+  COMPANIONS,
 } from '../data/options';
 import { TabBar, type Tab } from './controls/TabBar';
 import { StylePicker } from './controls/StylePicker';
@@ -24,13 +26,14 @@ interface WardrobeProps {
   onChange: (patch: Partial<Character>) => void;
 }
 
-type TabId = 'body' | 'hair' | 'tail' | 'outfit';
+type TabId = 'body' | 'hair' | 'tail' | 'outfit' | 'welt';
 
 const TABS: Tab[] = [
   { id: 'body', label: 'Körper' },
   { id: 'hair', label: 'Haare' },
   { id: 'tail', label: 'Schwanz' },
   { id: 'outfit', label: 'Outfit' },
+  { id: 'welt', label: 'Welt' },
 ];
 
 export function Wardrobe({ character, onChange }: WardrobeProps) {
@@ -136,6 +139,23 @@ export function Wardrobe({ character, onChange }: WardrobeProps) {
                   },
                 })
               }
+            />
+          </>
+        )}
+
+        {activeTab === 'welt' && (
+          <>
+            <StylePicker
+              label="Szene"
+              options={SCENES}
+              selectedId={character.scene}
+              onSelect={(id) => onChange({ scene: id })}
+            />
+            <StylePicker
+              label="Begleiter"
+              options={COMPANIONS}
+              selectedId={character.companion}
+              onSelect={(id) => onChange({ companion: id })}
             />
           </>
         )}
