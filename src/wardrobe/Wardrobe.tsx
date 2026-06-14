@@ -3,6 +3,7 @@ import type { Character } from '../types';
 import {
   BODY_TYPES,
   SKIN_TONES,
+  FACE_EXPRESSIONS,
   HAIR_STYLES,
   HAIR_COLORS,
   TAIL_SHAPES,
@@ -53,6 +54,12 @@ export function Wardrobe({ character, onChange }: WardrobeProps) {
               options={SKIN_TONES}
               selectedColor={character.skinTone}
               onSelect={(color) => onChange({ skinTone: color })}
+            />
+            <StylePicker
+              label="Gesicht"
+              options={FACE_EXPRESSIONS}
+              selectedId={character.face}
+              onSelect={(id) => onChange({ face: id })}
             />
           </>
         )}

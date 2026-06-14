@@ -59,6 +59,20 @@ describe('Wardrobe', () => {
     expect(latest.skinTone).not.toBe(DEFAULT_CHARACTER.skinTone);
   });
 
+  it('selecting a facial expression on the Körper tab updates face', async () => {
+    const user = userEvent.setup();
+    let latest: Character = DEFAULT_CHARACTER;
+    render(<Harness onState={(c) => (latest = c)} />);
+
+    // Körper is the default tab; the "Lachen" expression.
+    const lachen = screen.getByRole('button', { name: 'Lachen' });
+    expect(lachen).toHaveAttribute('aria-pressed', 'false');
+    await user.click(lachen);
+
+    expect(latest.face).toBe('lachen');
+    expect(screen.getByRole('button', { name: 'Lachen' })).toHaveAttribute('aria-pressed', 'true');
+  });
+
   it('toggling an accessory on the Outfit tab flips its boolean', async () => {
     const user = userEvent.setup();
     let latest: Character = DEFAULT_CHARACTER;

@@ -9,6 +9,7 @@ import {
   TAIL_PATTERNS,
   TOPS,
   SCENES,
+  FACE_EXPRESSIONS,
 } from '../data/options';
 
 function render(character: Character): string {
@@ -55,6 +56,13 @@ describe('CharacterStage', () => {
   it('renders every top', () => {
     for (const t of TOPS) {
       const markup = render({ ...DEFAULT_CHARACTER, top: { ...DEFAULT_CHARACTER.top, style: t.id } });
+      expect(markup).toContain('<svg');
+    }
+  });
+
+  it('renders every face expression', () => {
+    for (const f of FACE_EXPRESSIONS) {
+      const markup = render({ ...DEFAULT_CHARACTER, face: f.id });
       expect(markup).toContain('<svg');
     }
   });

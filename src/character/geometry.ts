@@ -164,6 +164,10 @@ export const FACE = {
   cheekY: HEAD.cy + 18,
   cheekDX: 30,
   noseY: HEAD.cy + 16,
+  /** Open-mouth anchors (lachen / staunend). mouthOpenY is the centre
+      of the open shape; mouthOpenR its base radius. */
+  mouthOpenY: HEAD.cy + 33,
+  mouthOpenR: 8,
 } as const;
 
 // ── Accessory anchors ────────────────────────────────────────

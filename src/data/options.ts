@@ -36,7 +36,20 @@ export const SKIN_TONES: ColorOption[] = [
   { color: '#3b1d0e', label: 'Dunkel'      },
 ];
 
-// ── 3. Hair styles ───────────────────────────────────────────
+// ── 3. Face expressions ──────────────────────────────────────
+// ids handled by character/parts/Face.tsx. 'smile' is the default
+// look; unknown ids fall back to 'smile' in the part component.
+
+export const FACE_EXPRESSIONS: StyleOption[] = [
+  { id: 'smile',    label: 'Lächeln'  },
+  { id: 'froh',     label: 'Froh'     },
+  { id: 'staunend', label: 'Staunend' },
+  { id: 'zwinkern', label: 'Zwinkern' },
+  { id: 'ruhig',    label: 'Ruhig'    },
+  { id: 'lachen',   label: 'Lachen'   },
+];
+
+// ── 4. Hair styles ───────────────────────────────────────────
 // ids: 'wavy' | 'long' | 'bun' | 'short' | 'ponytail'
 
 export const HAIR_STYLES: StyleOption[] = [
