@@ -8,6 +8,8 @@
 // the vertical axis CX and reads top→bottom: head → torso → tail.
 // ============================================================
 
+import type { BodyType } from '../types';
+
 /** SVG viewBox string shared by the single <svg> in CharacterStage. */
 export const VIEWBOX = '0 0 320 520';
 
@@ -69,7 +71,7 @@ export interface BodyShape {
   jawHalf: number;
 }
 
-export const BODY_SHAPE: Record<BodyTypeId, BodyShape> = {
+export const BODY_SHAPE: Record<BodyType, BodyShape> = {
   // Wassermann: broad square shoulders, flat chest, strong wide jaw.
   merman: { shoulderHalf: 78, waistHalf: 52, bust: 0, jawHalf: 42 },
   // In-between everywhere; androgynous.
@@ -78,8 +80,6 @@ export const BODY_SHAPE: Record<BodyTypeId, BodyShape> = {
   mermaid: { shoulderHalf: 47, waistHalf: 35, bust: 16, jawHalf: 26 },
 };
 
-/** Body type ids (kept local so geometry has no import cycle with types). */
-export type BodyTypeId = 'mermaid' | 'merman' | 'neutral';
 
 // ── Tail ─────────────────────────────────────────────────────
 // The tail begins at the waist and flows down to the fluke.
@@ -155,11 +155,11 @@ export const NECKLACE = {
   drop: 16,
 } as const;
 
+/** Ear anchor Y (where earrings hang from). */
+export const EAR_Y = HEAD.cy + 26;
+
 /** Earring anchors — at the lower side of the head, mirrored. */
 export const EARRINGS: ReadonlyArray<{ x: number; y: number }> = [
-  { x: HEAD.cx - HEAD.rx + 4, y: HEAD.cy + 26 },
-  { x: HEAD.cx + HEAD.rx - 4, y: HEAD.cy + 26 },
+  { x: HEAD.cx - HEAD.rx + 4, y: EAR_Y },
+  { x: HEAD.cx + HEAD.rx - 4, y: EAR_Y },
 ];
-
-/** Ear anchor (where earrings hang from). */
-export const EAR_Y = HEAD.cy + 22;

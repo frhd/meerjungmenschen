@@ -13,6 +13,9 @@ function nextId(prefix: string) {
   return `${prefix}-${counter}`;
 }
 
+/** Height of the rect used to tile a scale/pattern over the whole tail. */
+const TAIL_PATTERN_RECT_HEIGHT = TAIL.flukeBottomY - TAIL.startY + 32;
+
 /**
  * The lower fish half: a tapering body from the waist down to a
  * fluke/fin, plus an optional repeating pattern overlay.
@@ -76,7 +79,7 @@ export function Tail({ shape, color, pattern }: TailProps) {
       {/* Pattern overlay (clipped to the whole tail) */}
       <g clipPath={`url(#${clipId})`}>
         {pattern === 'scales' && (
-          <rect x={CX - TAIL.flukeHalf} y={TAIL.startY - 16} width={TAIL.flukeHalf * 2} height={HeightBelow()} fill={`url(#${scaleId})`} />
+          <rect x={CX - TAIL.flukeHalf} y={TAIL.startY - 16} width={TAIL.flukeHalf * 2} height={TAIL_PATTERN_RECT_HEIGHT} fill={`url(#${scaleId})`} />
         )}
         {pattern === 'spots' && <Spots color={light} />}
         {/* 'none' and any unknown pattern: just a soft highlight, no texture. */}
@@ -102,10 +105,6 @@ export function Tail({ shape, color, pattern }: TailProps) {
       />
     </g>
   );
-}
-
-function HeightBelow() {
-  return TAIL.flukeBottomY - TAIL.startY + 32;
 }
 
 /** Scattered polka-dot spots clipped to the tail. */
