@@ -1,5 +1,5 @@
 import type { Character } from '../types';
-import { VIEWBOX, PIVOTS } from './geometry';
+import { VIEWBOX, PIVOTS, COMPANION } from './geometry';
 import './stage.css';
 import { Scene } from './parts/Scene';
 import { Body } from './parts/Body';
@@ -9,6 +9,7 @@ import { Top } from './parts/Top';
 import { Face } from './parts/Face';
 import { Nails } from './parts/Nails';
 import { Accessories } from './parts/Accessories';
+import { Companion } from './parts/Companion';
 
 interface CharacterStageProps {
   character: Character;
@@ -21,7 +22,7 @@ interface CharacterStageProps {
  * All coordinates come from geometry.ts so the parts align.
  */
 export function CharacterStage({ character }: CharacterStageProps) {
-  const { bodyType, skinTone, scene, face, hair, tail, top, nails, accessories } = character;
+  const { bodyType, skinTone, scene, face, hair, tail, top, nails, accessories, companion } = character;
 
   return (
     <svg
@@ -71,6 +72,13 @@ export function CharacterStage({ character }: CharacterStageProps) {
 
         {/* Crown / necklace / earrings (each only if enabled) */}
         <Accessories crown={accessories.crown} necklace={accessories.necklace} earrings={accessories.earrings} />
+
+        {/* Little sea-creature sidekick — floats with the figure but bobs
+            about its own centre. Offset to the right, clear of the face.
+            Renders nothing when companion === 'none'. */}
+        <g className="anim-companion" style={{ transformOrigin: `${COMPANION.cx}px ${COMPANION.cy}px` }}>
+          <Companion companion={companion} />
+        </g>
       </g>
     </svg>
   );

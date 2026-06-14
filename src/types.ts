@@ -10,6 +10,7 @@ export interface Character {
   top: { style: string; color: string };
   nails: string;           // hex color
   accessories: { crown: boolean; necklace: boolean; earrings: boolean };
+  companion: string;       // sea-creature companion id, e.g. 'clownfish'
 }
 
 export const DEFAULT_CHARACTER: Character = {
@@ -22,4 +23,5 @@ export const DEFAULT_CHARACTER: Character = {
   top: { style: 'shell', color: '#d65a86' },
   nails: '#d65a86',
   accessories: { crown: false, necklace: false, earrings: false },
+  companion: 'none',
 }

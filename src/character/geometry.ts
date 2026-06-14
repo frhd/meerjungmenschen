@@ -193,6 +193,16 @@ export const EARRINGS: ReadonlyArray<{ x: number; y: number }> = [
   { x: HEAD.cx + HEAD.rx - 4, y: EAR_Y },
 ];
 
+// ── Companion ────────────────────────────────────────────────
+// A small sea creature off to the right of the figure, clear of the
+// merperson. The widest hand reaches ~CX+73, so cx=CX+96 (=256) keeps
+// it clear; with r=26 the half-width stays inside WIDTH=320.
+export const COMPANION = {
+  cx: CX + 96, // 256 — off to the right, clear of the figure
+  cy: 250,
+  r: 26,       // nominal size used to scale the creature
+} as const;
+
 // ── Animation pivots ─────────────────────────────────────────
 // transform-origin anchors for the ambient animation (stage.css).
 // CSS transform-origin on SVG elements is in user (viewBox) units,

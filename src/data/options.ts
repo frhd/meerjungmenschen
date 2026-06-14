@@ -146,3 +146,14 @@ export const SCENES: StyleOption[] = [
   { id: 'shallow', label: 'Sonnenlicht'  },
   { id: 'wreck',   label: 'Schiffswrack' },
 ];
+
+// ── 12. Companions ───────────────────────────────────────────
+// A little sea creature swimming beside the merperson. 'none' hides
+// it; Companion.tsx switches on these ids (unknown → 'clownfish').
+
+export const COMPANIONS: StyleOption[] = [
+  { id: 'none',      label: 'Keiner'       },
+  { id: 'clownfish', label: 'Clownfisch'   },
+  { id: 'seahorse',  label: 'Seepferdchen' },
+  { id: 'jelly',     label: 'Qualle'       },
+];

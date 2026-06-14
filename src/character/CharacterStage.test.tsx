@@ -10,6 +10,7 @@ import {
   TOPS,
   SCENES,
   FACE_EXPRESSIONS,
+  COMPANIONS,
 } from '../data/options';
 
 function render(character: Character): string {
@@ -85,6 +86,13 @@ describe('CharacterStage', () => {
     }
   });
 
+  it('renders every companion', () => {
+    for (const c of COMPANIONS) {
+      const markup = render({ ...DEFAULT_CHARACTER, companion: c.id });
+      expect(markup).toContain('<svg');
+    }
+  });
+
   it('wires the ambient animation hooks (float, tail sway, bubbles)', () => {
     const markup = render(DEFAULT_CHARACTER);
     // Figure float wrapper + nested tail/hair groups are present.
@@ -104,6 +112,7 @@ describe('CharacterStage', () => {
       hair: { style: 'zzz', color: '#123456' },
       tail: { shape: 'zzz', color: '#abcdef', pattern: 'zzz' },
       top: { style: 'zzz', color: '#fedcba' },
+      companion: 'zzz',
     };
     const markup = render(weird);
     expect(markup).toContain('<svg');
